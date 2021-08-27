@@ -1,7 +1,18 @@
 module Mastermind_codebreaker
   class Game
-    attr_accessor :players, :board, :current_turn
-    attr_reader :code_marks, :clue_marks
+
+    def game_loop
+      "Hello from game_loop!"
+      # codemaker decides the secret code, in this case it will be randomly generated.
+      # codebreaker begins guessing the code by typing in a color until all the slots are filled.
+      # codemaker then evaluates for a match, providing appropriate feedback.
+      # this repeats until the code is guessed, or there are no more rounds.
+    end # core_loop
+
+    def intro
+      # select game mode, and get player names.
+    end
+
     def initialize 
       @players = {
         codebreaker: {
@@ -11,69 +22,13 @@ module Mastermind_codebreaker
           name: "Computer"
         }
       }
-      @board = {
-        secret_code: nil,
-        slots: {
-          row_one: {
-            guesses: [],
-            clues: [],
-          },
-          row_two: {
-            guesses: [],
-            clues: [],
-          },
-          row_three: {
-            guesses: [],
-            clues: [],
-          },
-          row_four: {
-            guesses: [],
-            clues: [],
-          },
-          row_five: {
-            guesses: [],
-            clues: [],
-          },
-          row_six: {
-            guesses: [],
-            clues: [],
-          },
-          row_seven: {
-            guesses: [],
-            clues: [],
-          },
-          row_eight: {
-            guesses: [],
-            clues: [],
-          },
-          row_nine: {
-            guesses: [],
-            clues: [],
-          },
-          row_ten: {
-            guesses: [],
-            clues: [],
-          },
-          row_eleven: {
-            guesses: [],
-            clues: [],
-          },
-          row_twelve: {
-            guesses: [],
-            clues: [],
-          },
-        }
-      }
-      @current_turn
-      @code_marks = [{name: "Blue", mark: "B"}, {name: "Green", mark: "G"}, {name: "Yellow", mark: "Y"}, {name: "Orange", mark: "O"}]
-      @clue_marks = [{name: "Black", mark: "K"}, {name: "White", mark: "W"}]
-    end
-  end
-end
+      @code_colors = ["Red", "Purple", "Blue", "Green", "Yellow", "Orange"]
+      @clue_colors = ["Black", "White"]
+      @rounds = 12
+      @history = []
+    end # initialize
+  end # class Game
+end # module Mastermind_codebreaker
 
 include Mastermind_codebreaker
 new_game = Game.new
-
-new_game.board[:slots].each do |index, value|
-  puts("#{index}: #{value}")
-end
