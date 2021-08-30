@@ -2,8 +2,8 @@ require 'pry'
 
 module Mastermind_codebreaker
   class Game
-    attr_reader :players, :secret_code, :code_colors, :clue_colors, :rounds, :history
-    attr_accessor :guesses
+    attr_reader :players, :secret_code, :code_colors, :clue_colors, :rounds
+    attr_accessor :guesses, :history
 
     def initialize 
       @players = {
@@ -33,7 +33,6 @@ module Mastermind_codebreaker
     end # generate_random_secret_code
 
     def get_guess
-      puts("Hello from get_guess!")
       @round_data = {
         round: rounds[:current_round],
         guess: [],
@@ -81,7 +80,12 @@ module Mastermind_codebreaker
         validate_guess(guess)
       end # guess_four
       guess_four
+
+      history.push(@round_data)
+      
     end # get_guess
+
+    def evaluate_guess; end
 
     def game_loop
       # codemaker decides the secret code, in this case it will be randomly generated.
@@ -89,7 +93,9 @@ module Mastermind_codebreaker
       # codebreaker begins guessing the code by typing in a color until all the slots are filled.
       puts("Round #{rounds[:current_round]}")
       get_guess
+      binding.pry
       # codemaker then evaluates for a match, providing appropriate feedback.
+      # evaluate_guess
       # this repeats until the code is guessed, or there are no more rounds.
     end # game_loop
 
