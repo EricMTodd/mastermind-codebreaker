@@ -3,7 +3,7 @@ require 'pry'
 module Mastermind_codebreaker
   class Game
     attr_reader :players, :secret_code, :code_colors, :clue_colors, :rounds
-    attr_accessor :guesses, :history
+    attr_accessor :guesses, :history, :rounds
 
     def initialize 
       @players = {
@@ -85,18 +85,46 @@ module Mastermind_codebreaker
       
     end # get_guess
 
-    def evaluate_guess; end
+    def evaluate_guess
+      black_pegs_awarded = 0
+      p history[rounds[:current_round] - 1]
+      history[rounds[:current_round] - 1][:guess].each_with_index do |guess, index|
+        puts("#{index}: #{guess}")
+        if secret_code.include? guess and guess == secret_code[index]
+          puts("You've been awarded a black peg! This indicates a correct color in the correct position.")
+          history[rounds[:current_round] - 1][:clues].push(clue_colors[0])
+          black_pegs_awarded += 1
+          p history[rounds[:current_round] - 1]
+        elsif secret_code.include? guess and guess != secret_code[index]
+          puts("You've been awarded a white peg! This indicates a correct color in the incorrect position.")
+          history[rounds[:current_round] - 1][:clues].push(clue_colors[1])
+          p history[rounds[:current_round] - 1]
+        else
+          puts("You guessed an incorrect color. NO PEG FOR YOU!")
+        end
+      end
+
+      p black_pegs_awarded
+      if black_pegs_awarded == 4
+        puts("YOU WIN!")
+        rounds[:current_round] = 12
+      end
+    end
 
     def game_loop
       # codemaker decides the secret code, in this case it will be randomly generated.
       generate_random_secret_code
-      # codebreaker begins guessing the code by typing in a color until all the slots are filled.
-      puts("Round #{rounds[:current_round]}")
-      get_guess
-      binding.pry
-      # codemaker then evaluates for a match, providing appropriate feedback.
-      # evaluate_guess
+      p secret_code
+      while rounds[:current_round] <= rounds[:limit]
+        # codebreaker begins guessing the code by typing in a color until all the slots are filled.
+        puts("Round #{rounds[:current_round]}")
+        get_guess
+        # codemaker then evaluates for a match, providing appropriate feedback.
+        evaluate_guess
+        rounds[:current_round] += 1
+      end
       # this repeats until the code is guessed, or there are no more rounds.
+      puts("GAME OVER")
     end # game_loop
 
     def intro
@@ -108,4 +136,4 @@ module Mastermind_codebreaker
 end # module Mastermind_codebreaker
 
 include Mastermind_codebreaker
-p new_game = Game.new.game_loop
+new_game = Game.new.game_loop
